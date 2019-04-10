@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sidecar-injector-webhook-configmap
+  namespace: sidecar-injector
+data:
+  sidecarconfig.yaml: |
+    annotationPrefix: com.cloudbees.sidecar-injector
+    requiresExplicitInjection: false
+    container:
+      volumeMounts:
+        - name: ca-bundles
+          mountPath: /etc/ssl/certs/ca-certificates.crt # Alpine/Debian/Ubuntu/Gentoo etc.
+          subPath: ca-certificates.crt
+        - name: ca-bundles
+          mountPath: /etc/pki/tls/certs/ca-bundle.crt # Fedora/RHEL 6
+          subPath: ca-certificates.crt
+        - name: ca-bundles
+          mountPath: /etc/ssl/ca-bundle.pem # OpenSUSE
+          subPath: ca-certificates.crt
+        - name: ca-bundles
+          mountPath: /etc/pki/tls/cacert.pem # OpenELEC
+          subPath: ca-certificates.crt
+        - name: ca-bundles
+          mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem # CentOS/RHEL 7
+          subPath: ca-certificates.crt
+        - name: ca-bundles
+          mountPath: /etc/ssl/certs/java/cacerts # Alpine/Debian/Ubuntu/Gentoo etc.
+          subPath: cacerts
+        - name: ca-bundles
+          mountPath: /var/lib/ca-certificates/java-cacerts # OpenSUSE
+          subPath: cacerts
+        - name: ca-bundles
+          mountPath: /etc/pki/java/cacerts # CentOS/RHEL 6-7
+          subPath: cacerts
+    volumes:
+      - name: ca-bundles
+        configMap:
+          name: ca-bundles
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sidecar-injector-webhook-deployment
+  namespace: sidecar-injector
+  labels:
+    app: sidecar-injector
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sidecar-injector
+    spec:
+      containers:
+        - name: sidecar-injector
+          image: cloudbees/sidecar-injector:1.0.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - -sidecarCfgFile=/etc/webhook/config/sidecarconfig.yaml
+            - -tlsCertFile=/etc/webhook/certs/cert.pem
+            - -tlsKeyFile=/etc/webhook/certs/key.pem
+            - -alsologtostderr
+            - -v=4
+            - 2>&1
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+            - name: webhook-config
+              mountPath: /etc/webhook/config
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: sidecar-injector-webhook-certs
+        - name: webhook-config
+          configMap:
+            name: sidecar-injector-webhook-configmap
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: sidecar-injector-webhook-cfg
+  labels:
+    app: sidecar-injector
+webhooks:
+  - name: com.cloudbees.sidecar-injector
+    clientConfig:
+      service:
+        name: sidecar-injector-webhook-svc
+        namespace: sidecar-injector
+        path: "/mutate"
+      caBundle: "${CA_BUNDLE}"
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchLabels:
+        sidecar-injector: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sidecar-injector-webhook-svc
+  namespace: sidecar-injector
+  labels:
+    app: sidecar-injector
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+  selector:
+    app: sidecar-injector
