@@ -15,7 +15,7 @@ New CloudBees Core resource definitions from CloudBees can be [downloaded](https
 * [Kustomize](https://kustomize.io/) installed
 
 ## Deploy the NGINX Ingress Controller
-See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow.
+See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow. The [TLS/HTTPS topic](https://kubernetes.github.io/ingress-nginx/user-guide/tls/) is also useful.
 
 ## Setup cert-manager for Let's Encrypt TLS Certificates
 Run `./cert-manager/install.sh` to install cert-manager. This creates several Custom Resource Definitions and additional resources:
@@ -47,8 +47,8 @@ The [cert-manager webhook](https://docs.cert-manager.io/en/latest/getting-starte
 We use a `ClusterIssuer` tied to the Let's Encrypt production endpoint for Jenkins.
 
 ## Setup YAML
-There are a few places where the CloudBees Core resource definitions must be customized:
-1. The CJOC ingress resource should be modified to include a proper `<HOSTNAME>`, which is a DNS alias pointing to the external IP of the `ingress-ngninx` load balancer.
+There are a few places where the CloudBees Core resource definitions must be customized. We make customizations using Kustomize and a `kustomization.yaml` file:
+1. The CJOC ingress resource in `ingress.yaml` should be modified to include a proper `<HOSTNAME>`, which is a DNS alias pointing to the external IP of the `ingress-nginx` load balancer.
 ```
 kubectl get svc/ingress-nginx -n ingress-nginx
 ```
@@ -67,7 +67,7 @@ spec:
     ...
 ```
 
-3. For external, custom CAs or self-signed certificates, use the sidecar-injector provided by CloudBees or [create a ConfigMap](https://support.cloudbees.com/hc/en-us/articles/360018267271-Deploy-Self-Signed-Certificates-in-Masters-and-Agents) which includes the CA certificate data and JVM trustore, and mount this as a volume in CJOC and Managed Master StatefulSets. Create a patch for the CJOC StatefulSet in `kustomization.yaml`.
+3. For external, custom CAs or self-signed certificates, use the sidecar-injector provided by CloudBees or [create a ConfigMap](https://support.cloudbees.com/hc/en-us/articles/360018267271-Deploy-Self-Signed-Certificates-in-Masters-and-Agents) which includes the CA certificate data and JVM trustore, and mount this as a volume in CJOC and Managed Master pods. Create a patch for the CJOC StatefulSet in `kustomization.yaml`.
 
 ## Use Kustomize to Deploy
 Ensure the `jenkins` namespace exists:
@@ -93,13 +93,22 @@ statefulset.apps/cjoc created
 ingress.extensions/cjoc created
 ```
 
-Check the status of pods in the `jenkins` namespace. There should only be one at this point for the CJOC container. When `STATUS` changes from `ContainerCreating` to `Running`, access the Jenkins web UI at  `http://<HOSTNAME>/cjoc`. :
+Check the status of pods in the `jenkins` namespace. There should only be one at this point for the CJOC container. When `STATUS` changes from `ContainerCreating` to `Running`, access the Jenkins web UI at `http://<HOSTNAME>/cjoc`.
 ```
 ➜  prft-devops-k8s git:(master) ✗ kubectl get pods -w -n jenkins -o wide
 NAME     READY   STATUS    RESTARTS   AGE    IP           NODE                       NOMINATED NODE   READINESS GATES
 cjoc-0   1/1     Running   0          2m8s   10.244.1.6   aks-agentpool-30924121-1   <none>           <none>
 ```
 
-Cleanup:
+Get the initial administrator password:
+
+`kubectl exec cjoc-0 cat /var/jenkins_home/secrets/initialAdminPassword -n jenkins`
+
+Run through the initial setup: trial or full licensing, plugin installation, and initial user definition. After restart, login to CJOC and click the `New Master` button in the top-right to create an initial Managed Master.
+
+## Analytics with Elasticsearch Reporter
+
+
+## Cleanup
 
 `kustomize build | kubectl delete -f -`
