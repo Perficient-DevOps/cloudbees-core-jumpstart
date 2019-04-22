@@ -5,6 +5,15 @@ New CloudBees Core resource definitions from CloudBees can be [downloaded](https
 
 `tar -xvzf cloudbees-core_2.164.2.1_kubernetes.tgz`
 
+## Prerequisites
+* A running Kubernetes v1.7+/OpenShift v3.7+ cluster with nodes that have at least 2 CPUs and 4 GBs of memory
+* A namespace in the cluster with permissions to create `Role` and `RoleBinding` objects, i.e. `cluster-admin` role (full permissions) in that namespace (and that namespace only). This is only needed during installation, services run with custom RBAC resources.
+* A [default `storageclass`](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured. The following should return something:
+
+  `kubectl get sc -o yaml | grep storageclass.beta.kubernetes.io/is-default-class`
+
+* [Kustomize](https://kustomize.io/) installed
+
 ## Deploy the NGINX Ingress Controller
 See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow.
 
@@ -37,7 +46,7 @@ The [cert-manager webhook](https://docs.cert-manager.io/en/latest/getting-starte
 
 We use a `ClusterIssuer` tied to the Let's Encrypt production endpoint for Jenkins.
 
-## Use Kustomize to Deploy
+## Setup YAML
 There are a few places where the CloudBees Core resource definitions must be customized:
 1. The CJOC ingress resource should be modified to include a proper `<HOSTNAME>`, which is a DNS alias pointing to the external IP of the `ingress-ngninx` load balancer.
 ```
@@ -60,6 +69,7 @@ spec:
 
 3. For external, custom CAs or self-signed certificates, use the sidecar-injector provided by CloudBees or [create a ConfigMap](https://support.cloudbees.com/hc/en-us/articles/360018267271-Deploy-Self-Signed-Certificates-in-Masters-and-Agents) which includes the CA certificate data and JVM trustore, and mount this as a volume in CJOC and Managed Master StatefulSets. Create a patch for the CJOC StatefulSet in `kustomization.yaml`.
 
+## Use Kustomize to Deploy
 Ensure the `jenkins` namespace exists:
 
 `kubectl create ns jenkins`
