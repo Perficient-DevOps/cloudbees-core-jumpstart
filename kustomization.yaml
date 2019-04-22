@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: jenkins
+
+resources:
+- ./cloudbees-core_2.164.1.2_kubernetes/cloudbees-core.yml
+
+configmapGenerator:
+- name: cjoc-configure-jenkins-groovy
+  behavior: replace
+  files:
+  - location.groovy=conf/location.groovy
+
+patches:
+- ./ingress.yaml

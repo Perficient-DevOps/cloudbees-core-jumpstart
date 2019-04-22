@@ -1,4 +1,6 @@
 # https://docs.cert-manager.io/en/latest/getting-started/install.html
+# https://docs.cert-manager.io/en/latest/getting-started/webhook.html
+# https://docs.cert-manager.io/en/latest/tasks/issuing-certificates/ingress-shim.html
 
 # Create a namespace to run cert-manager
 kubectl create namespace cert-manager
