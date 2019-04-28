@@ -1,0 +1,55 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: openldap-server
+  labels:
+    app: openldap-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openldap-server
+  template:
+    metadata:
+      labels:
+        app: openldap-server
+    spec:
+      containers:
+      - name: openldap-server
+        image: osixia/openldap:1.2.4
+        imagePullPolicy: Always
+        env:
+        - name: LDAP_ORGANISATION
+          value: "Perficient"
+        - name: LDAP_DOMAIN
+          value: "perficientdevops.com"
+        - name: LDAP_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ldap-admin-password
+              key: password
+        ports:
+        - containerPort: 389
+        - containerPort: 686
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 0.1
+          limits:
+            memory: 2Gi
+            cpu: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openldap-server-svc
+spec:
+  ports:
+    - port: 3893
+      name: ldap
+      targetPort: 389
+    - port: 6863
+      name: ldaps
+      targetPort: 686
+  selector:
+    app: openldap-server
