@@ -13,7 +13,6 @@
    To interact with the LDAP server via `ldapsearch` or `ldapmodify` commands, you must execute commands inside the `openldap-server` container of the `openldap-server` pod:
    ```
    export OPENLDAP_POD=$(kubectl get pod -l app=openldap-server -o jsonpath="{.items[0].metadata.name}")
-
    kubectl exec $OPENLDAP_POD -- ldapsearch -x -H ldap://openldap-server-svc:3893 -b dc=perficientdevops,dc=com -D "cn=admin,dc=perficientdevops,dc=com" -w $LDAP_ADMIN_PASS
    ```
 
@@ -22,7 +21,6 @@
 3. Create users or groups using the LDIF in `/ldap`. Watch out for duplicates!
    ```
    kubectl cp ldap/prft-devops.ldif $OPENLDAP_POD:/tmp
-
    kubectl exec $OPENLDAP_POD -- ldapadd -x -H ldap:/// -D "cn=admin,dc=perficientdevops,dc=com" -w $LDAP_ADMIN_PASS -f /tmp/prft-devops.ldif
    ```
 

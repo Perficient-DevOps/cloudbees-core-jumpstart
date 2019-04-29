@@ -1,4 +1,4 @@
 **/.DS_Store
 **/*.tgz
 prft-devops-k8s-kubeconfig
-ldap/*.ldif
+ldap/prft-devops*.ldif

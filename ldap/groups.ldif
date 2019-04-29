@@ -1,0 +1,6 @@
+dn: cn=Developers,ou=Groups,dc=perficientdevops,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: Developers
+member: cn=Joe Blow,dc=perficientdevops,dc=com
+
