@@ -26,4 +26,4 @@ This engagement typically lasts **6-8 weeks**. Major dependencies include where 
 - (Optional) 1 Business Analyst/Project Manager to manage the engagement backlog, run daily stand-ups, and coordinate deliverables
 
 ## Why Perficient
-We are the leader in driving enterprise-wide, secure DevOps transformations. Our cross-functional team delivers expertise in development, testing, infrastructure, and operational support. We are pragmatic in supporting secure DevOps initiatives, improving results with existing tools, fixing broken processes, and enabling your teams to work smarter. 
+We are the leader in driving enterprise-wide, secure DevOps transformations. Our cross-functional team delivers expertise in development, testing, infrastructure, and operational support. We are pragmatic in supporting secure DevOps initiatives, improving results with existing tools, fixing broken processes, and enabling your teams to work smarter.
