@@ -13,7 +13,7 @@ New CloudBees Core resource definitions can be [downloaded](https://downloads.cl
 
   `kubectl get sc -o yaml | grep storageclass.beta.kubernetes.io/is-default-class`
 
-* [Kustomize](https://kustomize.io/) installed
+* [Kustomize](https://kustomize.io/) installed, or `kubectl` v1.14+
 
 ## Deploy the NGINX Ingress Controller
 See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow. The [TLS/HTTPS topic](https://kubernetes.github.io/ingress-nginx/user-guide/tls/) is also useful.
@@ -78,6 +78,10 @@ Ensure the `jenkins` namespace exists:
 To deploy using Kustomize:
 
 `kustomize build | kubectl apply -f -`
+
+To deploy using `kubectl` v1.14+:
+
+`kubectl kustomize . | kubectl apply -f -`
 
 A successful deployment looks like this:
 ```

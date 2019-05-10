@@ -16,6 +16,10 @@ Perficient offers a CloudBees Core Quickstart to help organizations get started 
 
 The Kubernetes cluster installation and CloudBees Core installation/configuration is intended to help clients get up and running quickly. In the interest of time and limiting scope, Kubernetes cluster setup and CloudBees Core installation/configuration is limited to a set of critical items that allows clients to realize value quickly while simultaneously identifying areas for incremental improvement.
 
+## Target Prospects
+- Organizations new to Jenkins and CloudBees who would like to accelerate implementation
+- Existing Jenkins or CloudBees users running on traditional VMs (configurations and pipelines will be migrated)
+
 ## Duration
 This engagement typically lasts **6-8 weeks**. Major dependencies include where to run Kubernetes, infrastructure provisioning for on-premise flavors, license procurement, and requirements gathering for container image development and pipeline development.
 
