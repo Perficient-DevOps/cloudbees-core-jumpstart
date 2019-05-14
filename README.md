@@ -1,4 +1,4 @@
-# CloudBees Core Quickstart
+# CloudBees Core Jumpstart
 This repo contains scripts, Kubernetes resource defintions, and a Kustomize configuration to get started with CloudBees Core. [`cert-manager`](http://docs.cert-manager.io/en/latest/) is used for certificate issuance via [Let's Encrypt](https://letsencrypt.org/).
 
 New CloudBees Core resource definitions can be [downloaded](https://downloads.cloudbees.com/cloudbees-core/cloud/) and extracted to this repo locally, then pushed to the remote. Do not modify the CloudBees Core resource definitons at all! This is what Kustomize is for:
