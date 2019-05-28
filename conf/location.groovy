@@ -1,2 +1,2 @@
 hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
-jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://k8s.perficientdevops.com/cjoc");
+jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://cloudbees.perficientdevops.com/cjoc");

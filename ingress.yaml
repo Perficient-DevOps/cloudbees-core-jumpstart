@@ -17,8 +17,8 @@ spec:
   # SSL offloading at ingress resource level
   tls:
   - hosts:
-    - k8s.perficientdevops.com
-    secretName: cloudbees-cjoc-letsencrypt-prod
+    - cloudbees.perficientdevops.com
+    secretName: cloudbees-core-letsencrypt-prod
   rules:
   - http:
       paths:
@@ -26,4 +26,4 @@ spec:
         backend:
           serviceName: cjoc
           servicePort: 80
-    host: k8s.perficientdevops.com
+    host: cloudbees.perficientdevops.com

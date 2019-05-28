@@ -63,8 +63,8 @@ There are a few places where the CloudBees Core resource definitions must be cus
      # SSL offloading at ingress resource level
      tls:
      - hosts:
-       - k8s.perficientdevops.com
-       secretName: cloudbees-cjoc-tls
+       - cloudbees.perficientdevops.com
+       secretName: cloudbees-core-letsencrypt-prod
        ...
    ```
 
