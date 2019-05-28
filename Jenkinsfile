@@ -3,8 +3,8 @@ node {
   echo 'Hello World'
   sh '''
     env
-    git clone https://globalrepository.mastercard.int/stash/scm/pipe/cjoc-pks.git
-    cd cjoc-pks
+    git clone https://github.com/Perficient-DevOps/cloudbees-core-jumpstart.git
+    cd cloudbees-core-jumpstart
     ls -al
     hostname
   '''
@@ -15,8 +15,8 @@ node ('maven') {
   echo 'Hello World'
   sh '''
     env
-    git clone https://globalrepository.mastercard.int/stash/scm/pipe/cjoc-pks.git
-    cd cjoc-pks
+    git clone https://github.com/Perficient-DevOps/cloudbees-core-jumpstart.git
+    cd cloudbees-core-jumpstart
     ls -al
     hostname
   '''
