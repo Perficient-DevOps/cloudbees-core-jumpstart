@@ -15,8 +15,10 @@ New CloudBees Core resource definitions can be [downloaded](https://downloads.cl
 
 * [Kustomize](https://kustomize.io/) installed, or `kubectl` v1.14+
 
+CloudBees provides a [Kubernetes Cluster Validation Tool](https://go.beescloud.com/docs/cloudbees-documentation/install-cje/cncf-tool/index.html) for multiple platforms to ensure that all prerequisites for product installation are met.
+
 ## Deploy the NGINX Ingress Controller
-See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow. The [TLS/HTTPS topic](https://kubernetes.github.io/ingress-nginx/user-guide/tls/) is also useful.
+Not required for OpenShift/OKD clusters. See the official [docs](https://kubernetes.github.io/ingress-nginx/deploy/) before jumping in. There are required resource definitions in `mandatory.yaml` and potentially provider-specific steps to follow. The [TLS/HTTPS topic](https://kubernetes.github.io/ingress-nginx/user-guide/tls/) is also useful.
 
 ## Setup `cert-manager` for TLS
 Run `./cert-manager/install.sh` to install `cert-manager`. This creates several Custom Resource Definitions and additional resources:
