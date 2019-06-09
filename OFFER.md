@@ -23,6 +23,8 @@ The Kubernetes cluster installation and CloudBees Core installation/configuratio
 ## Duration
 This engagement typically lasts **6-8 weeks**. Major dependencies include where to run Kubernetes, infrastructure provisioning for on-premise flavors, license procurement, and requirements gathering for container image development and pipeline development.
 
+<p align="center"><img src="cloudbees-core-jumpstart-timeline.gif" alt="Timeline" width="80%"/></p>
+
 ## Resourcing
 - 1 Solution Architect focused on Kubernetes cluster setup and configuration, and managing the overall engagement
 - 1 Technical Architect focused on CloudBees Core installation and configuration
